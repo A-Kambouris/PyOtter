@@ -40,6 +40,19 @@ print(len(startingPieceList))
 
 currentBoard = startingBoard
 
+
+whiteShortCastle = False
+blackShortCastle = False
+whiteLongCastle = False
+blackLongCastle = False
+
+
+whiteKingInCheck = False
+blackKingInCheck = False
+
+
+
+
 #move representation, create a list of possible moves
 
 def pawn_moves(currentBoard, position):
@@ -219,6 +232,83 @@ def queen_moves(currentBoard, position):
 
     return possibleMoves
 
+def castling_check(currentBoard, col):
+    global whiteShortCastle, blackShortCastle, whiteLongCastle, blackLongCastle
+    if col ==-1 and currentBoard[1][30]:
+        if currentBoard[0][29] == 0 and currentBoard[0][28] == 0 and currentBoard[0][27] == 0:
+            blackShortCastle = True
+        if currentBoard[0][31] == 0 and currentBoard[0][32] == 0 and currentBoard[0][33] == 0 and currentBoard[0][34] == 0:
+            blackLongCastle = True
+    if col ==1 and currentBoard[1][114] == 6:
+        if currentBoard[0][113] == 0 and currentBoard[0][112] == 0 and currentBoard[0][111] == 0:
+            whiteShortCastle = True
+        if currentBoard[0][115] == 0 and currentBoard[0][116] == 0 and currentBoard[0][117] == 0 and currentBoard[0][118] == 0:
+            whiteLongCastle = True
+
+
+def castle_long(currentBoard, col):
+    global whiteLongCastle, blackLongCastle
+    if col == -1 and blackLongCastle == True:
+        currentBoard[0][28] = -1
+        currentBoard[1][28] = 6
+
+        currentBoard[0][29] = -1
+        currentBoard[1][29] = 4
+
+        currentBoard[0][30] = 0
+        currentBoard[1][30] = 0
+
+        currentBoard[0][26] = 0
+        currentBoard[1][26] = 0
+
+        blackLongCastle = False
+    if col == 1 and whiteLongCastle == True:
+        currentBoard[0][112] = 1
+        currentBoard[1][112] = 6
+
+        currentBoard[0][113] = 1
+        currentBoard[1][113] = 4
+
+        currentBoard[0][114] = 0
+        currentBoard[1][114] = 0
+
+        currentBoard[0][110] = 0
+        currentBoard[1][110] = 0
+
+        whiteLongCastle = False
+
+
+def short_castle(currentBoard, col):
+    global whiteShortCastle, blackShortCastle
+    if col == -1 and blackShortCastle == True:
+        currentBoard[0][32] = -1
+        currentBoard[1][32] = 6
+
+        currentBoard[0][31] = -1
+        currentBoard[1][31] = 4
+
+        currentBoard[0][30] = 0
+        currentBoard[1][30] = 0
+
+        currentBoard[0][33] = 0
+        currentBoard[1][33] = 0
+        blackShortCastle = False
+
+    if col == 1 and whiteShortCastle == True:
+
+        currentBoard[0][116] = 1
+        currentBoard[1][116] = 6
+
+        currentBoard[0][115] = 1
+        currentBoard[1][115] = 4
+
+        currentBoard[0][114] = 0
+        currentBoard[1][114] = 0
+        currentBoard[0][117] = 0
+        currentBoard[1][117] = 0
+        whiteShortCastle = False
+
+
 
 def make_move(currentBoard, position_from, position_to):
     new_board = [currentBoard[0].copy(), currentBoard[1].copy()]
@@ -309,4 +399,4 @@ def get_moves_for_piece(board, position):
     i+=1"""
 
     # Starting position: perft(1)=20, perft(2)=400, perft(3)=8902, etc.
-print(f"Perft(1): {perft(startingBoard, 4, -1)}")  # Should be 20 for depth 1
+print(f"Perft(1): {perft(startingBoard, 3, -1)}")  # Should be 20 for depth 1
